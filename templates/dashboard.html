@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Welcome, {{ current_user.full_name }} 👋</h3>
+<div class="row mt-4 g-3">
+  <div class="col-md-3"><div class="card p-3 text-center"><h6>Total Logins</h6><h3>{{ total_logins }}</h3></div></div>
+  <div class="col-md-3"><div class="card p-3 text-center"><h6>Last Activity</h6>
+    <p class="mb-0">{{ last_log.action if last_log else 'N/A' }}</p></div></div>
+  <div class="col-md-3"><div class="card p-3 text-center"><h6>2FA Status</h6>
+    <span class="badge bg-{{ 'success' if current_user.is_2fa_enabled else 'secondary' }}">
+    {{ 'Enabled' if current_user.is_2fa_enabled else 'Disabled' }}</span></div></div>
+  <div class="col-md-3"><div class="card p-3 text-center"><h6>Security Score</h6><h3>{{ score }}/100</h3></div></div>
+</div>
+
+<div class="card mt-4 p-4">
+  <h5>Account Information</h5>
+  <p><strong>Email:</strong> {{ current_user.email }}</p>
+  <p><strong>Account Created:</strong> {{ current_user.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+  <p><strong>Last Login:</strong> {{ current_user.last_login.strftime('%Y-%m-%d %H:%M') if current_user.last_login else 'First login' }}</p>
+
+  {% if current_user.is_2fa_enabled %}
+    <form method="POST" action="{{ url_for('disable_2fa') }}">
+      <button class="btn btn-outline-danger" type="submit">Disable 2FA</button>
+    </form>
+  {% else %}
+    <a href="{{ url_for('setup_2fa') }}" class="btn btn-outline-success">Enable 2FA</a>
+  {% endif %}
+</div>
+{% endblock %}

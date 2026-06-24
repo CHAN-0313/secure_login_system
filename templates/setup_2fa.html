@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+<div class="col-md-5">
+<div class="card p-4 text-center">
+<h3 class="mb-3">Enable 2FA</h3>
+<p>Scan with Google Authenticator, then enter the code below.</p>
+<img src="data:image/png;base64,{{ qr_b64 }}" class="mb-3" alt="QR Code">
+<form method="POST">
+  {{ form.hidden_tag() }}
+  <div class="mb-3">{{ form.otp(class="form-control", placeholder="123456") }}</div>
+  {{ form.submit(class="btn btn-primary w-100") }}
+</form>
+</div>
+</div>
+</div>
+{% endblock %}
